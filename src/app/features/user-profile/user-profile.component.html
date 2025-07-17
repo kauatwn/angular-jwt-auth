@@ -1,0 +1,50 @@
+<section
+  class="mx-auto flex flex-col gap-6 rounded-xl border border-neutral-800 bg-neutral-900 p-8 shadow-lg sm:w-96"
+  aria-labelledby="dashboard-title"
+>
+  <header class="flex flex-col gap-6">
+    <div class="flex justify-center">
+      <span
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-800"
+        aria-hidden="true"
+      >
+        <lucide-icon
+          [img]="userCheck"
+          class="text-xl text-neutral-400"
+        ></lucide-icon>
+      </span>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <h2 id="dashboard-title" class="text-2xl font-semibold text-white">
+        Bem-vindo de volta!
+      </h2>
+      <p class="text-neutral-400">Você está autenticado no sistema</p>
+    </div>
+  </header>
+
+  <article
+    class="rounded-lg bg-neutral-800/50 p-4"
+    aria-labelledby="user-name"
+    aria-describedby="user-email"
+  >
+    <div class="flex items-center gap-4">
+      <span
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-700 text-sm font-semibold text-white"
+        aria-hidden="true"
+        >A</span
+      >
+      <div class="flex flex-col">
+        <p class="font-medium text-white" id="user-name">Admin User</p>
+        <p class="text-sm text-neutral-400" id="user-email">
+          admin&#64;example.com
+        </p>
+      </div>
+    </div>
+  </article>
+  <button
+    type="button"
+    class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+  >
+    Sair da conta
+  </button>
+</section>
