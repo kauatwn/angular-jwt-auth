@@ -1,0 +1,72 @@
+<section
+  class="flex flex-col gap-6 rounded-xl border border-neutral-800 bg-neutral-900 p-6 sm:w-96"
+>
+  <header class="flex flex-col gap-6">
+    <div class="flex justify-center">
+      <span
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-800"
+        aria-hidden="true"
+      >
+        <lucide-icon
+          [img]="lock"
+          class="text-xl text-neutral-400"
+        ></lucide-icon>
+      </span>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <h2 class="text-2xl font-semibold text-white">Entrar</h2>
+      <p class="text-neutral-400">Acesse sua conta para continuar</p>
+    </div>
+  </header>
+
+  <form
+    action=""
+    class="flex flex-col gap-6"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+  >
+    @for (field of fields; track $index) {
+      <div class="flex flex-col gap-2">
+        <label
+          [for]="field.controlName"
+          class="text-sm font-medium text-neutral-50"
+          >{{ field.label }}</label
+        >
+        <input
+          [id]="field.controlName"
+          [type]="field.type"
+          [formControlName]="field.controlName"
+          class="w-full rounded-[0.625rem] border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-white placeholder-neutral-500 transition focus:border-neutral-600 focus:bg-neutral-800/80 focus:ring-2 focus:ring-neutral-500 focus:outline-none"
+          [attr.placeholder]="field.placeholder"
+          [attr.autocomplete]="field.autocomplete"
+        />
+        @if (
+          form.get(field.controlName)?.invalid &&
+          form.get(field.controlName)?.touched
+        ) {
+          <span class="text-xs text-red-400" role="alert">
+            {{ field.error }}
+          </span>
+        }
+      </div>
+    }
+
+    <button
+      type="submit"
+      class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+    >
+      Entrar
+    </button>
+  </form>
+
+  <footer class="flex justify-center gap-2">
+    <span class="text-sm text-neutral-400">Não tem uma conta?</span>
+    <a
+      href="#"
+      id="show-login"
+      class="cursor-pointer text-sm font-medium text-neutral-300 transition hover:text-white hover:underline"
+    >
+      Cadastre-se
+    </a>
+  </footer>
+</section>
