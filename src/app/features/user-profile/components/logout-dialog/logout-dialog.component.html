@@ -1,0 +1,77 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ease-out"
+  [class.pointer-events-none]="!isOpen()"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+    [class.opacity-0]="!isOpen()"
+    [class.opacity-100]="isOpen()"
+    aria-hidden="true"
+    (click)="close.emit()"
+  ></div>
+
+  <!-- Dialog content -->
+  <div
+    class="relative transform transition-all duration-300 ease-out"
+    [class.opacity-0]="!isOpen()"
+    [class.translate-y-4]="!isOpen()"
+    [class.scale-95]="!isOpen()"
+    [class.opacity-100]="isOpen()"
+    [class.translate-y-0]="isOpen()"
+    [class.scale-100]="isOpen()"
+  >
+    <div
+      id="logout-card"
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="logout-title"
+      aria-describedby="logout-description"
+      class="relative flex flex-col gap-6 rounded-xl border border-neutral-800 bg-neutral-900 p-6 shadow-2xl sm:w-96"
+    >
+      <button
+        type="button"
+        aria-label="Fechar dialog"
+        class="absolute -top-3 -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-neutral-800 text-neutral-400 hover:bg-neutral-700 hover:text-white focus:ring-2 focus:ring-neutral-600 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+        (click)="close.emit()"
+      >
+        <lucide-icon [img]="xIcon"></lucide-icon>
+      </button>
+
+      <header class="flex flex-col gap-6">
+        <div class="flex justify-center">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-800"
+          >
+            <lucide-icon [img]="logoutIcon" class="text-xl text-neutral-400" />
+          </span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <h2 id="logout-title" class="text-2xl font-semibold text-white">
+            Sair da conta
+          </h2>
+          <p id="logout-description" class="text-neutral-400">
+            Tem certeza que deseja sair?
+          </p>
+        </div>
+      </header>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+          (click)="logout()"
+        >
+          Sim, sair
+        </button>
+        <button
+          type="button"
+          class="w-full cursor-pointer rounded-[0.625rem] border border-neutral-700 px-4 py-2 font-medium text-white hover:bg-neutral-800 focus:ring-2 focus:ring-neutral-600 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+          (click)="close.emit()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
