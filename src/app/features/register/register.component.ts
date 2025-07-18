@@ -21,7 +21,7 @@ import { passwordMatchValidator } from '../../shared/validators/password-match.v
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
-  readonly userPlus: LucideIconData = UserPlus;
+  readonly userPlusIcon: LucideIconData = UserPlus;
 
   readonly form = new FormGroup(
     {

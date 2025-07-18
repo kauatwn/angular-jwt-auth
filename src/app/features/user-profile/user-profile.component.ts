@@ -9,5 +9,5 @@ import { LucideAngularModule, LucideIconData, UserCheck } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent {
-  readonly userCheck: LucideIconData = UserCheck;
+  readonly userCheckIcon: LucideIconData = UserCheck;
 }
