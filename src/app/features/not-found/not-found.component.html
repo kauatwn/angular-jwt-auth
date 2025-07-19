@@ -1,0 +1,31 @@
+<section
+  class="mx-auto mt-24 flex flex-col gap-6 rounded-xl border border-neutral-800 bg-neutral-900 p-6 sm:w-96"
+>
+  <header class="flex flex-col gap-6">
+    <div class="flex justify-center">
+      <span
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-800"
+        aria-hidden="true"
+      >
+        <lucide-icon
+          [img]="alertTriangleIcon"
+          class="text-xl text-neutral-400"
+        ></lucide-icon>
+      </span>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <h2 class="text-2xl font-semibold text-white">Página não encontrada</h2>
+      <p class="text-center text-neutral-400">
+        A rota acessada não existe ou foi removida.
+      </p>
+    </div>
+  </header>
+
+  <button
+    type="button"
+    class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+    (click)="goToLogin()"
+  >
+    Voltar para o login
+  </button>
+</section>
