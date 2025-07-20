@@ -10,12 +10,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Lock, LucideAngularModule, LucideIconData } from 'lucide-angular';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-login',
-  imports: [LucideAngularModule, ReactiveFormsModule],
+  imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
