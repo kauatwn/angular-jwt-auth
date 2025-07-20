@@ -17,11 +17,7 @@ export class LogoutDialogComponent {
   readonly logoutIcon: LucideIconData = LogOut;
   readonly xIcon: LucideIconData = X;
 
-  readonly isOpen = input<boolean>(false);
-  readonly close = output<void>();
-
-  logout() {
-    // Adicione sua lógica de logout aqui
-    this.close.emit();
-  }
+  readonly isDialogOpen = input.required<boolean>();
+  readonly confirmed = output<void>();
+  readonly closed = output<void>();
 }
