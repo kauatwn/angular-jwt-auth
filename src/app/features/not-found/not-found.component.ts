@@ -1,19 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AlertTriangle, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-not-found',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink],
   templateUrl: './not-found.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotFoundComponent {
   protected readonly alertTriangleIcon = AlertTriangle;
-  private readonly router = inject(Router);
-
-  goToLogin(): void {
-    this.router.navigate(['/login']);
-  }
 }

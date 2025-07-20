@@ -21,11 +21,10 @@
     </div>
   </header>
 
-  <button
-    type="button"
-    class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
-    (click)="goToLogin()"
+  <a
+    routerLink="/login"
+    class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 text-center font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
   >
     Voltar para o login
-  </button>
+  </a>
 </section>
