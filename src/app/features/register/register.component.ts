@@ -26,7 +26,7 @@ export class RegisterComponent {
 
   readonly form = new FormGroup(
     {
-      username: new FormControl('', {
+      name: new FormControl('', {
         validators: [Validators.required, Validators.minLength(2)],
       }),
       email: new FormControl('', {
@@ -36,7 +36,7 @@ export class RegisterComponent {
         validators: [Validators.required, Validators.minLength(6)],
       }),
       confirmPassword: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(6)],
+        validators: [Validators.required],
       }),
     },
     { validators: passwordMatchValidator() },
@@ -45,7 +45,7 @@ export class RegisterComponent {
   readonly fields = [
     {
       type: 'text',
-      controlName: 'username',
+      controlName: 'name',
       label: 'Nome completo',
       placeholder: 'Seu nome',
       error: 'Nome deve ter pelo menos 2 caracteres',
@@ -83,23 +83,6 @@ export class RegisterComponent {
     const subscription = this.form.statusChanges.subscribe((status) => {
       this.formStatus.set(status);
     });
-    onCleanup(() => subscription.unsubscribe());
-  });
-
-  private readonly formClearErrorsEffect = effect((onCleanup) => {
-    const subscription = this.form.valueChanges.subscribe(() => {
-      const currentErrors = this.form.errors;
-
-      if (currentErrors && 'passwordMismatch' in currentErrors) {
-        const password = this.form.get('password')?.value;
-        const confirmPassword = this.form.get('confirmPassword')?.value;
-
-        if (password === confirmPassword) {
-          this.form.setErrors(null);
-        }
-      }
-    });
-
     onCleanup(() => subscription.unsubscribe());
   });
 
