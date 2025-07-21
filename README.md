@@ -73,20 +73,26 @@ angular-jwt-auth/
     ├── app/
     │   ├── core/
     │   │   ├── guards/
+    │   │   │   ├── auth/
+    │   │   │   └── no-auth/
     │   │   ├── interceptors/
+    │   │   │   └── auth/
     │   │   ├── models/
     │   │   └── services/
+    │   │       ├── auth/
+    │   │       └── token/
     │   ├── features/
     │   │   ├── login/
+    │   │   ├── not-found/
     │   │   ├── register/
-    │   │   ├── user-profile/
-    │   │   │   └── components/
-    │   │   └── not-found/
+    │   │   └── user-profile/
+    │   │       └── components/
+    │   │           └── logout-dialog/
     │   ├── shared/
     │   │   └── validators/
     │   ├── app.component.*
     │   ├── app.config.ts
-    │   └── app.routes.ts
+    │   └── app.route.ts
     ├── index.html
     ├── main.ts
     └── styles.css
