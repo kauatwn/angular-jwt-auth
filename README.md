@@ -35,7 +35,7 @@ Siga os passos abaixo para executar o projeto:
 1. Clone este repositório em sua máquina local:
 
    ```bash
-   git clone https://github.com/seu-usuario/angular-jwt-auth.git
+   git clone https://github.com/kauatwn/angular-jwt-auth.git
    ```
 
 2. Acesse a pasta do projeto:
