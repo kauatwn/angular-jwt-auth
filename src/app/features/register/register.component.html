@@ -41,11 +41,8 @@
           [attr.autocomplete]="field.autocomplete"
         />
         @if (
-          (field.controlName === "confirmPassword" &&
-            form.get("confirmPassword")?.hasError("required") &&
-            form.get("confirmPassword")?.touched) ||
-          (field.controlName !== "confirmPassword" &&
-            form.get(field.controlName)?.invalid &&
+          form.get(field.controlName)?.invalid &&
+          (form.get(field.controlName)?.dirty ||
             form.get(field.controlName)?.touched)
         ) {
           <span class="text-xs text-red-400" role="alert">
@@ -54,8 +51,9 @@
         } @else if (
           field.controlName === "confirmPassword" &&
           form.hasError("passwordMismatch") &&
-          form.get("confirmPassword")?.touched &&
-          form.get("confirmPassword")?.value
+          (form.get(field.controlName)?.dirty ||
+            form.get(field.controlName)?.touched) &&
+          form.get(field.controlName)?.value
         ) {
           <span class="text-xs text-red-400" role="alert">
             As senhas não coincidem
