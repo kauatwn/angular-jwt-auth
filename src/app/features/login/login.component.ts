@@ -12,7 +12,6 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Lock, LucideAngularModule, LucideIconData } from 'lucide-angular';
-import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-login',
@@ -24,13 +23,10 @@ import { passwordMatchValidator } from '../../shared/validators/password-match.v
 export class LoginComponent {
   readonly lockIcon: LucideIconData = Lock;
 
-  readonly form = new FormGroup(
-    {
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    },
-    { validators: passwordMatchValidator() },
-  );
+  readonly form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
 
   readonly fields = [
     {
