@@ -58,6 +58,18 @@ export class TokenService {
     this.storage.removeItem(`${this.REFRESH_TOKEN_KEY}_expires_at`);
   }
 
+  isTokenExpired(token: string): boolean {
+    try {
+      const payload = this.decodeJwtToken(token);
+      if (!payload.expiresAt) return true;
+
+      const now = Math.floor(Date.now() / 1000);
+      return payload.expiresAt <= now + environment.tokenRefreshBuffer;
+    } catch {
+      return true;
+    }
+  }
+
   private hasValidRefreshToken(): boolean {
     const refreshToken = this._refreshToken();
     if (!refreshToken) return false;
@@ -74,18 +86,6 @@ export class TokenService {
       return !this.isTokenExpired(refreshToken);
     } catch {
       // Se não for JWT, assume válido (backend valida)
-      return true;
-    }
-  }
-
-  isTokenExpired(token: string): boolean {
-    try {
-      const payload = this.decodeJwtToken(token);
-      if (!payload.expiresAt) return true;
-
-      const now = Math.floor(Date.now() / 1000);
-      return payload.expiresAt <= now + environment.tokenRefreshBuffer;
-    } catch {
       return true;
     }
   }
