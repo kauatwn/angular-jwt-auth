@@ -12,11 +12,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
   const authService = inject(AuthService);
 
-  // Clonar request adicionando o header Authorization se existir token válido
-  const accessToken = tokenService.getAccessToken();
+  const accessToken = tokenService.accessToken();
+  const isTokenValid = accessToken && !tokenService.isTokenExpired(accessToken);
 
   let authorizedRequest = req;
-  if (accessToken) {
+  if (isTokenValid) {
     authorizedRequest = req.clone({
       setHeaders: {
         Authorization: `Bearer ${accessToken}`,
@@ -30,12 +30,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      // Só tentamos o refresh se for erro 401 (unauthorized)
       if (error.status !== HttpStatusCode.Unauthorized) {
         return throwError(() => error);
       }
 
-      const refreshToken = tokenService.getRefreshToken();
+      const refreshToken = tokenService.refreshToken();
 
       if (!refreshToken) {
         tokenService.clearTokens();
@@ -44,7 +43,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
       return authService.refreshToken({ refreshToken }).pipe(
         switchMap((tokens) => {
-          // Após renovar token, repetir a requisição original com novo token
           const retriedRequest = req.clone({
             setHeaders: {
               Authorization: `Bearer ${tokens.accessToken}`,
@@ -53,7 +51,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return next(retriedRequest);
         }),
         catchError((refreshError: unknown) => {
-          // Se falhar no refresh, limpar tokens e propagar erro
           tokenService.clearTokens();
           return throwError(() => refreshError);
         }),
