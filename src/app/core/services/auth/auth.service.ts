@@ -28,14 +28,20 @@ export class AuthService {
     return this.http
       .post<AuthSessionResponse>(`${this.baseUrl}/register`, request)
       .pipe(
-        tap((tokens) => {
-          this.tokenService.saveTokens(
-            tokens.accessToken,
-            tokens.refreshToken,
-            tokens.accessTokenExpiresAt,
-            tokens.refreshTokenExpiresAt,
-          );
-        }),
+        tap(
+          ({
+            accessToken,
+            refreshToken,
+            accessTokenExpiresAt,
+            refreshTokenExpiresAt,
+          }) => {
+            this.tokenService.setAccessToken(accessToken, accessTokenExpiresAt);
+            this.tokenService.setRefreshToken(
+              refreshToken,
+              refreshTokenExpiresAt,
+            );
+          },
+        ),
       );
   }
 
@@ -43,14 +49,20 @@ export class AuthService {
     return this.http
       .post<AuthSessionResponse>(`${this.baseUrl}/login`, credentials)
       .pipe(
-        tap((tokens) => {
-          this.tokenService.saveTokens(
-            tokens.accessToken,
-            tokens.refreshToken,
-            tokens.accessTokenExpiresAt,
-            tokens.refreshTokenExpiresAt,
-          );
-        }),
+        tap(
+          ({
+            accessToken,
+            refreshToken,
+            accessTokenExpiresAt,
+            refreshTokenExpiresAt,
+          }) => {
+            this.tokenService.setAccessToken(accessToken, accessTokenExpiresAt);
+            this.tokenService.setRefreshToken(
+              refreshToken,
+              refreshTokenExpiresAt,
+            );
+          },
+        ),
       );
   }
 
@@ -58,14 +70,20 @@ export class AuthService {
     return this.http
       .post<AuthSessionResponse>(`${this.baseUrl}/refresh-token`, request)
       .pipe(
-        tap((tokens) => {
-          this.tokenService.saveTokens(
-            tokens.accessToken,
-            tokens.refreshToken,
-            tokens.accessTokenExpiresAt,
-            tokens.refreshTokenExpiresAt,
-          );
-        }),
+        tap(
+          ({
+            accessToken,
+            refreshToken,
+            accessTokenExpiresAt,
+            refreshTokenExpiresAt,
+          }) => {
+            this.tokenService.setAccessToken(accessToken, accessTokenExpiresAt);
+            this.tokenService.setRefreshToken(
+              refreshToken,
+              refreshTokenExpiresAt,
+            );
+          },
+        ),
       );
   }
 
