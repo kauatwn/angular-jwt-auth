@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {
   JwtPayload,
@@ -15,123 +15,77 @@ export class TokenService {
   private readonly ACCESS_TOKEN_KEY = `${environment.storagePrefix}${environment.storage.accessTokenKey}`;
   private readonly REFRESH_TOKEN_KEY = `${environment.storagePrefix}${environment.storage.refreshTokenKey}`;
 
-  private readonly _isAuthenticated = signal(false);
-  readonly isAuthenticated = this._isAuthenticated.asReadonly();
+  private readonly _accessToken = signal<string | null>(
+    this.storage.getItem(this.ACCESS_TOKEN_KEY),
+  );
+  private readonly _refreshToken = signal<string | null>(
+    this.storage.getItem(this.REFRESH_TOKEN_KEY),
+  );
 
-  readonly authEffect = effect(() => {
-    this._isAuthenticated.set(this.hasValidTokens());
+  readonly isAuthenticated = computed(() => {
+    const accessToken = this._accessToken();
+    const refreshToken = this._refreshToken();
+
+    if (!accessToken || !refreshToken) return false;
+    return !this.isTokenExpired(accessToken) && this.hasValidRefreshToken();
   });
 
-  getAccessToken(): string | null {
-    return this.storage.getItem(this.ACCESS_TOKEN_KEY);
-  }
+  readonly accessToken = this._accessToken;
+  readonly refreshToken = this._refreshToken;
 
-  getRefreshToken(): string | null {
-    return this.storage.getItem(this.REFRESH_TOKEN_KEY);
-  }
-
-  setAccessToken(token: string): void {
+  setAccessToken(token: string, expiresAt?: string): void {
+    this._accessToken.set(token);
     this.storage.setItem(this.ACCESS_TOKEN_KEY, token);
-    this.updateAuthState();
+    if (expiresAt) {
+      this.storage.setItem(`${this.ACCESS_TOKEN_KEY}_expires_at`, expiresAt);
+    }
   }
 
-  setRefreshToken(token: string): void {
+  setRefreshToken(token: string, expiresAt?: string): void {
+    this._refreshToken.set(token);
     this.storage.setItem(this.REFRESH_TOKEN_KEY, token);
-    this.updateAuthState();
+    if (expiresAt) {
+      this.storage.setItem(`${this.REFRESH_TOKEN_KEY}_expires_at`, expiresAt);
+    }
   }
 
-  // Limpar todos os tokens
   clearTokens(): void {
+    this._accessToken.set(null);
+    this._refreshToken.set(null);
     this.storage.removeItem(this.ACCESS_TOKEN_KEY);
     this.storage.removeItem(this.REFRESH_TOKEN_KEY);
     this.storage.removeItem(`${this.ACCESS_TOKEN_KEY}_expires_at`);
     this.storage.removeItem(`${this.REFRESH_TOKEN_KEY}_expires_at`);
-    this._isAuthenticated.set(false);
   }
 
-  // Definir ambos os tokens com timestamps
-  saveTokens(
-    accessToken: string,
-    refreshToken: string,
-    accessExpiresAt?: string,
-    refreshExpiresAt?: string,
-  ): void {
-    this.setAccessToken(accessToken);
-    this.setRefreshToken(refreshToken);
-
-    // Salvar timestamps se fornecidos
-    if (accessExpiresAt) {
-      this.storage.setItem(
-        `${this.ACCESS_TOKEN_KEY}_expires_at`,
-        accessExpiresAt,
-      );
-    }
-    if (refreshExpiresAt) {
-      this.storage.setItem(
-        `${this.REFRESH_TOKEN_KEY}_expires_at`,
-        refreshExpiresAt,
-      );
-    }
-
-    // Forçar atualização do estado de autenticação
-    this.updateAuthState();
-  }
-
-  // Verificar se há tokens válidos
-  hasValidTokens(): boolean {
-    const accessToken = this.getAccessToken();
-    const refreshToken = this.getRefreshToken();
-
-    if (!accessToken || !refreshToken) {
-      return false;
-    }
-
-    // Se temos refresh token válido, consideramos autenticado
-    // O access token pode estar expirado mas será renovado pelo interceptor
-    return this.hasValidRefreshToken();
-  }
-
-  // Verificar se o refresh token está válido (não expirado)
   private hasValidRefreshToken(): boolean {
-    const refreshToken = this.getRefreshToken();
+    const refreshToken = this._refreshToken();
+    if (!refreshToken) return false;
 
-    if (!refreshToken) {
-      return false;
-    }
-
-    // Primeiro, verificar se temos um timestamp salvo
     const refreshExpiresAt = this.storage.getItem(
       `${this.REFRESH_TOKEN_KEY}_expires_at`,
     );
     if (refreshExpiresAt) {
-      const expirationDate = new Date(refreshExpiresAt);
-      const now = new Date();
-      const isExpired = now >= expirationDate;
-      return !isExpired;
+      return new Date() < new Date(refreshExpiresAt);
     }
 
-    // Para refresh tokens que são JWTs, verificar expiração
+    // Se não tem timestamp, tenta verificar pela expiração no JWT
     try {
-      const isExpired = this.isTokenExpired(refreshToken);
-      return !isExpired;
-    } catch (error) {
-      // Se não for JWT (string aleatória), assumir que está válido
-      // O backend será responsável por validar
+      return !this.isTokenExpired(refreshToken);
+    } catch {
+      // Se não for JWT, assume válido (backend valida)
       return true;
     }
   }
 
-  // Verificar se o token está expirado
-  private isTokenExpired(token: string): boolean {
+  isTokenExpired(token: string): boolean {
     try {
       const payload = this.decodeJwtToken(token);
-
       if (!payload.expiresAt) return true;
 
-      // Adicionar margem de 30 segundos antes da expiração
       const now = Math.floor(Date.now() / 1000);
-      return payload.expiresAt <= now + 30;
-    } catch (error) {
+      return payload.expiresAt <= now + environment.tokenRefreshBuffer;
+    } catch {
       return true;
     }
   }
@@ -154,12 +108,11 @@ export class TokenService {
 
       const jwtPayload = JSON.parse(jsonPayload) as Partial<JwtPayload>;
 
-      // Mapear campos do JWT padrão para nosso TokenPayload
       return {
         subject: jwtPayload.sub || '',
         email: jwtPayload.email || '',
         issuedAt: jwtPayload.iat || 0,
-        expiresAt: jwtPayload.exp || 0, // Mapear 'exp' para 'expiresAt'
+        expiresAt: jwtPayload.exp || 0,
         issuer: jwtPayload.iss,
         audience: jwtPayload.aud,
         sessionId: jwtPayload.jti,
@@ -167,10 +120,5 @@ export class TokenService {
     } catch (error) {
       throw new Error(`Token inválido: ${(error as Error).message}`);
     }
-  }
-
-  // Atualizar estado de autenticação
-  private updateAuthState(): void {
-    this._isAuthenticated.set(this.hasValidTokens());
   }
 }
