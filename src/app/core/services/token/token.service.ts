@@ -15,26 +15,23 @@ export class TokenService {
   private readonly ACCESS_TOKEN_KEY = `${environment.storagePrefix}${environment.storage.accessTokenKey}`;
   private readonly REFRESH_TOKEN_KEY = `${environment.storagePrefix}${environment.storage.refreshTokenKey}`;
 
-  private readonly _accessToken = signal<string | null>(
+  readonly accessToken = signal<string | null>(
     this.storage.getItem(this.ACCESS_TOKEN_KEY),
   );
-  private readonly _refreshToken = signal<string | null>(
+  readonly refreshToken = signal<string | null>(
     this.storage.getItem(this.REFRESH_TOKEN_KEY),
   );
 
   readonly isAuthenticated = computed(() => {
-    const accessToken = this._accessToken();
-    const refreshToken = this._refreshToken();
+    const accessToken = this.accessToken();
+    const refreshToken = this.refreshToken();
 
     if (!accessToken || !refreshToken) return false;
     return !this.isTokenExpired(accessToken) && this.hasValidRefreshToken();
   });
 
-  readonly accessToken = this._accessToken;
-  readonly refreshToken = this._refreshToken;
-
   setAccessToken(token: string, expiresAt?: string): void {
-    this._accessToken.set(token);
+    this.accessToken.set(token);
     this.storage.setItem(this.ACCESS_TOKEN_KEY, token);
     if (expiresAt) {
       this.storage.setItem(`${this.ACCESS_TOKEN_KEY}_expires_at`, expiresAt);
@@ -42,7 +39,7 @@ export class TokenService {
   }
 
   setRefreshToken(token: string, expiresAt?: string): void {
-    this._refreshToken.set(token);
+    this.refreshToken.set(token);
     this.storage.setItem(this.REFRESH_TOKEN_KEY, token);
     if (expiresAt) {
       this.storage.setItem(`${this.REFRESH_TOKEN_KEY}_expires_at`, expiresAt);
@@ -50,8 +47,8 @@ export class TokenService {
   }
 
   clearTokens(): void {
-    this._accessToken.set(null);
-    this._refreshToken.set(null);
+    this.accessToken.set(null);
+    this.refreshToken.set(null);
     this.storage.removeItem(this.ACCESS_TOKEN_KEY);
     this.storage.removeItem(this.REFRESH_TOKEN_KEY);
     this.storage.removeItem(`${this.ACCESS_TOKEN_KEY}_expires_at`);
@@ -71,7 +68,7 @@ export class TokenService {
   }
 
   private hasValidRefreshToken(): boolean {
-    const refreshToken = this._refreshToken();
+    const refreshToken = this.refreshToken();
     if (!refreshToken) return false;
 
     const refreshExpiresAt = this.storage.getItem(
