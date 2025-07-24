@@ -19,6 +19,15 @@
     </div>
   </header>
 
+  @if (loginError()) {
+    <div
+      class="rounded-[0.625rem] border border-red-800 bg-red-900/20 px-3 py-2 text-center text-sm text-red-400"
+      role="alert"
+    >
+      {{ loginError() }}
+    </div>
+  }
+
   <form
     action=""
     class="flex flex-col gap-6"
@@ -42,7 +51,8 @@
         />
         @if (
           form.get(field.controlName)?.invalid &&
-          form.get(field.controlName)?.touched
+          (form.get(field.controlName)?.touched ||
+            form.get(field.controlName)?.dirty)
         ) {
           <span class="text-xs text-red-400" role="alert">
             {{ field.error }}
@@ -53,9 +63,28 @@
 
     <button
       type="submit"
-      class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+      class="w-full rounded-[0.625rem] px-4 py-2 font-medium transition duration-200 ease-in-out focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
+      [class.bg-neutral-50]="canSubmit()"
+      [class.text-neutral-900]="canSubmit()"
+      [class.cursor-pointer]="canSubmit()"
+      [class.bg-neutral-300]="isDisabled()"
+      [class.text-neutral-500]="isDisabled()"
+      [class.cursor-not-allowed]="isDisabled()"
+      [class.cursor-wait]="isLoading()"
+      [disabled]="isDisabled()"
     >
-      Entrar
+      @if (isLoading()) {
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon
+            [img]="loaderCircleIcon"
+            class="h-4 w-4 animate-spin text-neutral-900"
+            aria-hidden="true"
+          />
+          <span>Entrando...</span>
+        </div>
+      } @else {
+        Entrar
+      }
     </button>
   </form>
 
