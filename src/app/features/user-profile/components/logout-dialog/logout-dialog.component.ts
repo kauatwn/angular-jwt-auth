@@ -4,7 +4,13 @@ import {
   input,
   output,
 } from '@angular/core';
-import { LogOut, LucideAngularModule, LucideIconData, X } from 'lucide-angular';
+import {
+  LoaderCircle,
+  LogOut,
+  LucideAngularModule,
+  LucideIconData,
+  X,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-logout-dialog',
@@ -16,8 +22,10 @@ import { LogOut, LucideAngularModule, LucideIconData, X } from 'lucide-angular';
 export class LogoutDialogComponent {
   readonly logoutIcon: LucideIconData = LogOut;
   readonly xIcon: LucideIconData = X;
+  readonly loaderCircleIcon: LucideIconData = LoaderCircle;
 
   readonly isDialogOpen = input.required<boolean>();
+  readonly isLoading = input.required<boolean>();
   readonly confirmed = output<void>();
   readonly closed = output<void>();
 }
