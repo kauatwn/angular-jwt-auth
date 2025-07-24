@@ -52,6 +52,7 @@
 
 <app-logout-dialog
   [isDialogOpen]="isLogoutDialogOpen()"
+  [isLoading]="isLoggingOut()"
   (closed)="closeLogoutDialog()"
   (confirmed)="handleLogout()"
 ></app-logout-dialog>
