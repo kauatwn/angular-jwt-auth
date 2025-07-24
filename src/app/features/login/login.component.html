@@ -64,9 +64,9 @@
     <button
       type="submit"
       class="w-full rounded-[0.625rem] px-4 py-2 font-medium transition duration-200 ease-in-out focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"
-      [class.bg-neutral-50]="canSubmit()"
-      [class.text-neutral-900]="canSubmit()"
-      [class.cursor-pointer]="canSubmit()"
+      [class.bg-neutral-50]="!isDisabled()"
+      [class.text-neutral-900]="!isDisabled()"
+      [class.cursor-pointer]="!isDisabled()"
       [class.bg-neutral-300]="isDisabled()"
       [class.text-neutral-500]="isDisabled()"
       [class.cursor-not-allowed]="isDisabled()"

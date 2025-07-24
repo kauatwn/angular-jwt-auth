@@ -68,7 +68,6 @@ export class LoginComponent {
   readonly isLoading = signal(false);
   readonly isFormValid = signal(this.form.valid);
 
-  readonly canSubmit = computed(() => !this.isLoading() && this.isFormValid());
   readonly isDisabled = computed(() => this.isLoading() || !this.isFormValid());
 
   private readonly formStatusEffect = effect((onCleanup) => {
