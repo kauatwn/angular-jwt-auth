@@ -1,7 +1,10 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
+  inject,
   signal,
 } from '@angular/core';
 import {
@@ -10,8 +13,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { LucideAngularModule, LucideIconData, UserPlus } from 'lucide-angular';
+import { Router, RouterLink } from '@angular/router';
+import {
+  LoaderCircle,
+  LucideAngularModule,
+  LucideIconData,
+  UserPlus,
+} from 'lucide-angular';
+import { finalize, timer } from 'rxjs';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 
 @Component({
@@ -22,7 +32,13 @@ import { passwordMatchValidator } from '../../shared/validators/password-match.v
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   readonly userPlusIcon: LucideIconData = UserPlus;
+  readonly loaderCircleIcon: LucideIconData = LoaderCircle;
+
+  readonly isLoading = signal(false);
 
   readonly form = new FormGroup(
     {
@@ -78,6 +94,19 @@ export class RegisterComponent {
   ];
 
   private readonly formStatus = signal(this.form.status);
+  readonly registerError = signal<string | null>(null);
+  readonly isFormValid = signal(this.form.valid);
+
+  readonly canSubmit = computed(() => !this.isLoading() && this.isFormValid());
+  readonly isDisabled = computed(() => this.isLoading() || !this.isFormValid());
+
+  private readonly formValidityEffect = effect((onCleanup) => {
+    const subscription = this.form.statusChanges.subscribe(() => {
+      this.isFormValid.set(this.form.valid);
+    });
+
+    onCleanup(() => subscription.unsubscribe());
+  });
 
   private readonly formStatusEffect = effect((onCleanup) => {
     const subscription = this.form.statusChanges.subscribe((status) => {
@@ -87,11 +116,57 @@ export class RegisterComponent {
   });
 
   onSubmit() {
+    this.registerError.set(null);
+
     if (this.form.valid) {
-      // TODO: Lógica para enviar os dados do formulário
-      console.log('Formulário enviado com sucesso:', this.form.value);
+      this.isLoading.set(true);
+
+      const { name, email, password, confirmPassword } =
+        this.form.getRawValue();
+
+      if (!name || !email || !password || !confirmPassword) {
+        timer(500).subscribe(() => this.isLoading.set(false));
+        return;
+      }
+
+      this.authService
+        .register({ name, email, password, confirmPassword })
+        .pipe(
+          finalize(() => {
+            timer(500).subscribe(() => this.isLoading.set(false));
+          }),
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/user-profile']);
+          },
+          error: (error: unknown) => {
+            timer(500).subscribe(() => {
+              this.registerError.set(this.parseRegisterError(error));
+            });
+          },
+        });
     } else {
       this.form.markAllAsTouched();
+      timer(500).subscribe(() => this.isLoading.set(false));
     }
+  }
+
+  private parseRegisterError(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return 'Erro desconhecido. Por favor, tente novamente ou contate o suporte.';
+    }
+
+    if (error.status === HttpStatusCode.BadRequest) {
+      // TODO: Obter mensagem de erro da API
+      // // Precisa tipar o erro para acessar a propriedade 'error?.message'
+      // const apiMessage = error.error?.message;
+      // if (typeof apiMessage === 'string') {
+      //   return apiMessage; // Exibe a mensagem real da API
+      // }
+      return 'Falha ao criar conta. Verifique os dados e tente novamente.';
+    }
+
+    return 'Erro ao criar conta. Tente novamente mais tarde.';
   }
 }
