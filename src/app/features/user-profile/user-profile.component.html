@@ -31,16 +31,20 @@
       <span
         class="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-700 text-sm font-semibold text-white"
         aria-hidden="true"
-        >A</span
       >
+        {{ userInitial() }}
+      </span>
       <div class="flex flex-col">
-        <p class="font-medium text-white" id="user-name">Admin User</p>
+        <p class="font-medium text-white" id="user-name">
+          {{ userProfile()?.name }}
+        </p>
         <p class="text-sm text-neutral-400" id="user-email">
-          admin&#64;example.com
+          {{ userProfile()?.email }}
         </p>
       </div>
     </div>
   </article>
+
   <button
     type="button"
     class="w-full cursor-pointer rounded-[0.625rem] bg-neutral-50 px-4 py-2 font-medium text-neutral-900 transition duration-200 ease-in-out hover:bg-neutral-200 focus:ring-2 focus:ring-neutral-300 focus:ring-offset-2 focus:ring-offset-neutral-900 focus:outline-none"

@@ -1,12 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule, LucideIconData, UserCheck } from 'lucide-angular';
 import { timer } from 'rxjs';
+import { UserProfileResponse } from '../../core/models/auth.model';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { LogoutDialogComponent } from './components/logout-dialog/logout-dialog.component';
 
@@ -24,8 +27,20 @@ export class UserProfileComponent {
   readonly userCheckIcon: LucideIconData = UserCheck;
 
   readonly isLoggingOut = signal(false);
+  readonly isLogoutDialogOpen = signal(false);
+  readonly userProfile = signal<UserProfileResponse | null>(null);
 
-  isLogoutDialogOpen = signal(false);
+  readonly loadUserProfileEffect = effect(() => {
+    this.authService.getUserProfile().subscribe({
+      next: (user) => this.userProfile.set(user),
+      error: () => this.router.navigate(['/login']),
+    });
+  });
+
+  readonly userInitial = computed(() => {
+    const name = this.userProfile()?.name ?? '';
+    return name ? name[0].toUpperCase() : '?';
+  });
 
   openLogoutDialog(): void {
     this.isLogoutDialogOpen.set(true);
