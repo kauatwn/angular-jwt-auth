@@ -60,8 +60,11 @@ Siga os passos abaixo para executar o projeto:
 
 ## Screenshots
 
-> [!NOTE]  
-> As imagens da aplicação serão adicionadas em breve.
+Abaixo alguns exemplos da interface da aplicação:
+
+![Login Page](images/login.png)
+![Register Page](images/register.png)
+![User Profile Page](images/user-profile.png)
 
 ## Estrutura do Projeto
 
@@ -92,7 +95,7 @@ angular-jwt-auth/
     │   │   └── validators/
     │   ├── app.component.*
     │   ├── app.config.ts
-    │   └── app.route.ts
+    │   └── app.routes.ts
     ├── index.html
     ├── main.ts
     └── styles.css
