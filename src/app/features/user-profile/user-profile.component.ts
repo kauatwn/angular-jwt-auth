@@ -57,7 +57,6 @@ export class UserProfileComponent {
       this.authService.logout();
       this.closeLogoutDialog();
       this.isLoggingOut.set(false);
-      this.router.navigate(['/login']);
     });
   }
 }
