@@ -65,6 +65,7 @@ Abaixo alguns exemplos da interface da aplicação:
 ![Login Page](images/login.png)
 ![Register Page](images/register.png)
 ![User Profile Page](images/user-profile.png)
+![Not Found Page](images/not_found.png)
 
 ## Estrutura do Projeto
 
