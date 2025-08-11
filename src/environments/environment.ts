@@ -2,8 +2,8 @@ import { Environment } from '../app/core/models/environment.model';
 
 export const environment: Environment = {
   production: false,
-  apiUrl: 'http://localhost:5080/api',
-  tokenRefreshBuffer: 30, // segundos antes da expiração para renovar
+  apiUrl: '', // Defina a URL da sua API local aqui
+  tokenRefreshBuffer: 30, // Segundos antes da expiração para renovar
   storagePrefix: 'angular_jwt_auth_',
   storage: {
     accessTokenKey: 'access_token',
