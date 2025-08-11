@@ -28,6 +28,25 @@ O objetivo deste projeto é servir como um exemplo prático de como construir ap
 - [Node.js](https://nodejs.org/en/download) (versão recomendada: 18+)
 - [Angular CLI](https://v19.angular.dev/installation) (versão 19+)
 
+> [!IMPORTANT]  
+> Antes de executar o projeto, edite o arquivo `src/environments/environment.ts` e defina o valor de `apiUrl` com o endpoint da sua API.  
+> Exemplo:  
+>
+> ```ts
+>   import { Environment } from '../app/core/models/environment.model';
+>
+>   export const environment: Environment = {
+>      production: false,
+>      apiUrl: 'http://localhost:5080/api', // Defina a URL da sua API local aqui
+>      tokenRefreshBuffer: 30,
+>      storagePrefix: 'angular_jwt_auth_',
+>      storage: {
+>         accessTokenKey: 'access_token',
+>         refreshTokenKey: 'refresh_token',
+>      },
+>   };
+> ```
+
 ## Como Executar
 
 Siga os passos abaixo para executar o projeto:
