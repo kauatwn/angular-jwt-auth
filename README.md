@@ -11,6 +11,7 @@ O objetivo deste projeto é servir como um exemplo prático de como construir ap
 - Uso de control flow nativo no template
 - Componentização standalone e lazy loading de rotas
 - Proteção de rotas com guards (`authGuard` e `noAuthGuard`)
+- Interceptação de requisições HTTP com token JWT via Interceptors
 - Interface responsiva e estilização moderna com Tailwind CSS
 - Boas práticas de performance e arquitetura
 
@@ -33,18 +34,18 @@ O objetivo deste projeto é servir como um exemplo prático de como construir ap
 > Exemplo:  
 >
 > ```ts
->   import { Environment } from '../app/core/models/environment.model';
+> import { Environment } from '../app/core/models/environment.model';
 >
->   export const environment: Environment = {
->      production: false,
->      apiUrl: 'http://localhost:5080/api', // Defina a URL da sua API local aqui
->      tokenRefreshBuffer: 30,
->      storagePrefix: 'angular_jwt_auth_',
->      storage: {
->         accessTokenKey: 'access_token',
->         refreshTokenKey: 'refresh_token',
->      },
->   };
+> export const environment: Environment = {
+>   production: false,
+>   apiUrl: 'http://localhost:5080/api', // Defina a URL da sua API local aqui
+>   tokenRefreshBuffer: 30,
+>   storagePrefix: 'angular_jwt_auth_',
+>   storage: {
+>     accessTokenKey: 'access_token',
+>     refreshTokenKey: 'refresh_token',
+>   },
+> };
 > ```
 
 ## Como Executar
