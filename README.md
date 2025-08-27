@@ -1,33 +1,47 @@
 # Angular JWT Auth
 
-Este projeto é uma aplicação de autenticação desenvolvida com Angular 19+, focada em demonstrar práticas modernas do framework, como signals para gerenciamento reativo de estado, standalone components, control flow nativo (`@if`, `@for`), e integração com uma API de autenticação JWT. A interface é estilizada com Tailwind CSS e prioriza experiência do usuário e performance.
+Este projeto é uma aplicação de autenticação desenvolvida para praticar e demonstrar recursos modernos do Angular 19+, como signals para gerenciamento reativo de estado, control flow nativo (`@if`, `@for`), standalone components e outras boas práticas recomendadas pela equipe Angular. A aplicação implementa um sistema completo de autenticação JWT e utiliza Tailwind CSS para estilização moderna e responsiva.
+
+## Sumário
+
+- [Objetivo](#objetivo)
+- [Funcionalidades](#funcionalidades)
+- [Pré-requisitos](#pré-requisitos)
+- [Como Executar](#como-executar)
+- [Screenshots](#screenshots)
+- [Estrutura do Projeto](#estrutura-do-projeto)
 
 ## Objetivo
 
-O objetivo deste projeto é servir como um exemplo prático de como construir aplicações Angular modernas e seguras, utilizando as funcionalidades mais recentes do framework. A aplicação implementa:
+O objetivo deste projeto é servir como um exemplo prático e didático de como construir aplicações Angular modernas e seguras, utilizando as funcionalidades mais recentes do framework para garantir código limpo, eficiente e de fácil manutenção. A aplicação de autenticação implementa:
 
 - Autenticação JWT com login, registro e refresh de token
 - Gerenciamento de estado local com signals
 - Uso de control flow nativo no template
-- Componentização standalone e lazy loading de rotas
+- Componentização seguindo o padrão standalone
 - Proteção de rotas com guards (`authGuard` e `noAuthGuard`)
 - Interceptação de requisições HTTP com token JWT via Interceptors
 - Interface responsiva e estilização moderna com Tailwind CSS
+- Lazy loading de rotas para otimização de performance
 - Boas práticas de performance e arquitetura
 
 ## Funcionalidades
 
-- **Login:** Autentica o usuário e armazena tokens JWT.
-- **Registro:** Cria uma nova conta de usuário.
-- **Perfil:** Exibe dados do usuário autenticado e permite logout.
-- **Proteção de rotas:** Usuários não autenticados são redirecionados para login; usuários autenticados não acessam login/registro.
-- **Diálogo de logout:** Confirmação visual para encerrar sessão.
-- **Página de erro:** Exibe mensagem para rotas não encontradas.
+- **Login:** Autentica o usuário e armazena tokens JWT com validação de formulário
+- **Registro:** Cria uma nova conta de usuário com validação de senha
+- **Perfil:** Exibe dados do usuário autenticado e permite logout
+- **Proteção de rotas:** Usuários não autenticados são redirecionados para login; usuários autenticados não acessam login/registro
+- **Diálogo de logout:** Confirmação visual para encerrar sessão com segurança
+- **Página de erro:** Exibe mensagem personalizada para rotas não encontradas
+- **Refresh automático:** Renovação automática de tokens JWT antes da expiração
 
 ## Pré-requisitos
 
+Escolha uma das opções para executar o projeto:
+
 - [Node.js](https://nodejs.org/en/download) (versão recomendada: 18+)
 - [Angular CLI](https://v19.angular.dev/installation) (versão 19+)
+- [Docker](https://www.docker.com/)
 
 > [!IMPORTANT]  
 > Antes de executar o projeto, edite o arquivo `src/environments/environment.ts` e defina o valor de `apiUrl` com o endpoint da sua API.  
@@ -38,7 +52,7 @@ O objetivo deste projeto é servir como um exemplo prático de como construir ap
 >
 > export const environment: Environment = {
 >   production: false,
->   apiUrl: 'http://localhost:5080/api', // Defina a URL da sua API local aqui
+>   apiUrl: '', // Defina a URL da sua API local aqui
 >   tokenRefreshBuffer: 30,
 >   storagePrefix: 'angular_jwt_auth_',
 >   storage: {
@@ -50,33 +64,62 @@ O objetivo deste projeto é servir como um exemplo prático de como construir ap
 
 ## Como Executar
 
-Siga os passos abaixo para executar o projeto:
+Você pode executar o projeto de duas formas:
 
-1. Clone este repositório em sua máquina local:
+1. **Com Docker** (recomendado para evitar configurações locais)
+2. **Localmente com Node.js/Angular CLI**
 
-   ```bash
-   git clone https://github.com/kauatwn/angular-jwt-auth.git
-   ```
+### Clone o Projeto
 
-2. Acesse a pasta do projeto:
+Clone este repositório em sua máquina local:
+
+```bash
+git clone https://github.com/kauatwn/angular-jwt-auth.git
+```
+
+### Executar com Docker
+
+1. Navegue até a pasta raiz do projeto:
 
    ```bash
    cd angular-jwt-auth
    ```
 
-3. Instale as dependências:
+2. Construa a imagem Docker:
+
+   ```bash
+   docker build -t angular-jwt-auth .
+   ```
+
+3. Execute o container:
+
+   ```bash
+   docker run --rm -p 8080:80 angular-jwt-auth
+   ```
+
+Após executar os comandos acima, a aplicação estará disponível em [http://localhost:8080](http://localhost:8080).
+
+### Executar Localmente
+
+1. Acesse a pasta do projeto:
+
+   ```bash
+   cd angular-jwt-auth
+   ```
+
+2. Instale as dependências:
 
    ```bash
    npm install
    ```
 
-4. Inicie o servidor de desenvolvimento:
+3. Inicie o servidor de desenvolvimento:
 
    ```bash
    npm start
    ```
 
-5. Acesse a aplicação em [http://localhost:4200](http://localhost:4200).
+4. Acesse a aplicação em [http://localhost:4200](http://localhost:4200).
 
 ## Screenshots
 
@@ -122,4 +165,4 @@ angular-jwt-auth/
     └── styles.css
 ```
 
-Cada funcionalidade é independente, focada em uma única responsabilidade e utiliza signals para o gerenciamento de estado. O sistema de autenticação garante segurança e persistência dos tokens JWT.
+Cada funcionalidade é independente, focada em uma única responsabilidade e utiliza signals para o gerenciamento de estado. O sistema de autenticação garante segurança e persistência dos tokens JWT com proteção automática de rotas e interceptação de requisições HTTP.
