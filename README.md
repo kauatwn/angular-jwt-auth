@@ -44,21 +44,16 @@ Escolha uma das opções para executar o projeto:
 - [Docker](https://www.docker.com/)
 
 > [!IMPORTANT]  
-> Antes de executar o projeto, edite o arquivo `src/environments/environment.ts` e defina o valor de `apiUrl` com o endpoint da sua API.  
-> Exemplo:  
+> Antes de executar o projeto, configure a URL da sua API nos arquivos de environment:
+>
+> - Edite `src/environments/environment.ts` e defina `apiUrl`
+> - Edite `src/environments/environment.prod.ts` e defina `apiUrl`
+>
+> Exemplo:
 >
 > ```ts
-> import { Environment } from '../app/core/models/environment.model';
->
 > export const environment: Environment = {
->   production: false,
->   apiUrl: '', // Defina a URL da sua API local aqui
->   tokenRefreshBuffer: 30,
->   storagePrefix: 'angular_jwt_auth_',
->   storage: {
->     accessTokenKey: 'access_token',
->     refreshTokenKey: 'refresh_token',
->   },
+>   apiUrl: 'http://localhost:4200/api', // URL da sua API
 > };
 > ```
 
@@ -94,10 +89,10 @@ git clone https://github.com/kauatwn/angular-jwt-auth.git
 3. Execute o container:
 
    ```bash
-   docker run --rm -p 8080:80 angular-jwt-auth
+   docker run --rm -p 4200:80 angular-jwt-auth
    ```
 
-Após executar os comandos acima, a aplicação estará disponível em [http://localhost:8080](http://localhost:8080).
+Após executar os comandos acima, a aplicação estará disponível em [http://localhost:4200](http://localhost:4200).
 
 ### Executar Localmente
 
