@@ -112,10 +112,12 @@ Após executar os comandos acima, a aplicação estará disponível em [http://l
 Edite `src/environments/environment.ts` e defina a URL absoluta da sua API. Exemplo:
 
    ```ts
+   import { Environment } from '../app/core/models/environment.model';
+   
    export const environment: Environment = {
-   production: false,
-   apiUrl: 'http://localhost:8080/api', // URL absoluta do backend
-   // ... outras configurações
+      production: false,
+      apiUrl: 'http://localhost:8080/api', // URL absoluta do backend
+      // ... outras configurações
    };
    ```
 
