@@ -13,7 +13,7 @@ Este projeto é uma aplicação de autenticação desenvolvida para praticar e d
 - [Estrutura do Projeto](#estrutura-do-projeto)
 
 > [!IMPORTANT]
-> Este projeto foi desenvolvido em colaboração com [@sirkaue](https://github.com/sirkaue). A API está disponível em <https://github.com/sirkaue/jwt-auth-api>. Certifique-se de que o backend esteja configurado e em execução para autenticação funcionar corretamente.
+> Este projeto foi desenvolvido em colaboração com [@sirkaue](https://github.com/sirkaue). A API está disponível em [JWT Auth API](https://github.com/sirkaue/jwt-auth-api). Certifique-se de que o backend esteja configurado e em execução para autenticação funcionar corretamente.
 
 ## Objetivo
 
@@ -124,11 +124,11 @@ O projeto utiliza Nginx como proxy reverso quando executado via Docker. Configur
 
    ```nginx
    location /api/ {
-   # proxy_pass http://host.docker.internal:5000; # Descomente e ajuste a porta conforme necessário. Ex.: 5000, 8080, etc.
-   proxy_set_header Host $host;
-   proxy_set_header X-Real-IP $remote_addr;
-   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-   proxy_set_header X-Forwarded-Proto $scheme;
+      # proxy_pass http://host.docker.internal:5000; # Descomente e ajuste a porta conforme necessário. Ex.: 5000, 8080, etc.
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
    }
    ```
 
