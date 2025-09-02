@@ -8,8 +8,12 @@ Este projeto é uma aplicação de autenticação desenvolvida para praticar e d
 - [Funcionalidades](#funcionalidades)
 - [Pré-requisitos](#pré-requisitos)
 - [Como Executar](#como-executar)
+- [Configuração do Backend](#configuração-do-backend)
 - [Screenshots](#screenshots)
 - [Estrutura do Projeto](#estrutura-do-projeto)
+
+> [!IMPORTANT]
+> Este projeto foi desenvolvido em colaboração com [@sirkaue](https://github.com/sirkaue). A API está disponível em <https://github.com/sirkaue/jwt-auth-api>. Certifique-se de que o backend esteja configurado e em execução para autenticação funcionar corretamente.
 
 ## Objetivo
 
@@ -42,20 +46,6 @@ Escolha uma das opções para executar o projeto:
 - [Node.js](https://nodejs.org/en/download) (versão recomendada: 18+)
 - [Angular CLI](https://v19.angular.dev/installation) (versão 19+)
 - [Docker](https://www.docker.com/)
-
-> [!IMPORTANT]  
-> Antes de executar o projeto, configure a URL da sua API nos arquivos de environment:
->
-> - Edite `src/environments/environment.ts` e defina `apiUrl`
-> - Edite `src/environments/environment.prod.ts` e defina `apiUrl`
->
-> Exemplo:
->
-> ```ts
-> export const environment: Environment = {
->   apiUrl: 'http://localhost:4200/api', // URL da sua API
-> };
-> ```
 
 ## Como Executar
 
@@ -115,6 +105,32 @@ Após executar os comandos acima, a aplicação estará disponível em [http://l
    ```
 
 4. Acesse a aplicação em [http://localhost:4200](http://localhost:4200).
+
+## Configuração do Backend
+
+1. Ao executar localmente (com ng serve)
+Edite `src/environments/environment.ts` e defina a URL absoluta da sua API. Exemplo:
+
+   ```ts
+   export const environment: Environment = {
+   production: false,
+   apiUrl: 'http://localhost:8080/api', // URL absoluta do backend
+   // ... outras configurações
+   };
+   ```
+
+2. Ao executar com Docker
+O projeto utiliza Nginx como proxy reverso quando executado via Docker. Configure o proxy no arquivo `nginx.conf`, localize o bloco `location /api/` e ajuste a diretiva `proxy_pass` para apontar para o backend. Exemplo:
+
+   ```nginx
+   location /api/ {
+   # proxy_pass http://host.docker.internal:5000; # Descomente e ajuste a porta conforme necessário. Ex.: 5000, 8080, etc.
+   proxy_set_header Host $host;
+   proxy_set_header X-Real-IP $remote_addr;
+   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+   proxy_set_header X-Forwarded-Proto $scheme;
+   }
+   ```
 
 ## Screenshots
 
