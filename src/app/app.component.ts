@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  sytles: ``,
+  styles: ``,
 })
 export class AppComponent {
   title = 'angular-jwt-auth';
